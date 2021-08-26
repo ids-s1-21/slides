@@ -25,12 +25,21 @@ htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 dev.off <- function(){
   invisible(grDevices::dev.off())
 }
+# devtools
+if (!require("devtools")) install.packages("devtools")
+library(devtools)
+# devtools
+if (!require("xaringanthemer")) install.packages("xaringanthemer")
+library(xaringanthemer)
 # countdown
+if (!require("countdown")) devtools::install_github("gadenbuie/countdown")
 library(countdown)
 # conflicted
+if (!require("conflicted")) install.packages("conflicted")
 library(conflicted)
 conflict_prefer("filter", "dplyr")
 # xaringanExtra
+if (!require("xaringanExtra")) devtools::install_github("gadenbuie/xaringanExtra")
 library(xaringanExtra)
 xaringanExtra::use_panelset()
 # output number of lines
@@ -54,6 +63,11 @@ knitr::knit_hooks$set(output = function(x, options) {
   x <- paste(c(x, ""), collapse = "\n")
   hook_output(x, options)
 })
+if (!require("emo")) devtools::install_github("hadley/emo")
+library(emo)
+
+if (!require("xaringanthemer")) devtools::install_github("xaringanthemer")
+library(xaringanthemer)
 ```
 
 layout: true
