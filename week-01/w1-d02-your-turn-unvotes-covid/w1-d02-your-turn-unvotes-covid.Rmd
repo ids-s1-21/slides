@@ -4,7 +4,7 @@ subtitle: "01 - First dataviz"
 output:
   xaringan::moon_reader:
     seal: false
-    css: ["../../slides.css", "../../xaringan-themer.css"]
+    css: ["./slides.css", "./xaringan-themer.css"]
     lib_dir: libs
     nature:
       ratio: "16:9"
@@ -31,7 +31,8 @@ Pick one and complete it. Optionally, try the other one as well.
 .your-turn[
 **Option 1.**
 
-- Go to [RStudio Cloud](https://rstudio.cloud/) and start `AE 01a - First dataviz - UN Votes`.
+- Go to [RStudio Cloud](https://rstudio.cloud/) and make sure you are in the "IDS 2021" space.
+- Click on "New Project", then "New Project from Git Repository", and paste the following "URL of your Git Repository" into the text box (https://github.com/ids-s1-21/ae-01a-un-votes).
 - In the Files pane (bottom right corner), spot the file called `unvotes.Rmd`. 
 - Open it and click "Knit".
 - Then...
@@ -45,7 +46,8 @@ Pick one and complete it. Optionally, try the other one as well.
 .your-turn[
 **Option 2.**
 
-- Go to [RStudio Cloud](https://rstudio.cloud/) and start `AE 01b - First dataviz - COVID-19`.
+- Go to [RStudio Cloud](https://rstudio.cloud/) and make sure you are in the "IDS 2021" space.
+- Click on "New Project", then "New Project from Git Repository", and paste the following "URL of your Git Repository" into the text box (https://github.com/ids-s1-21/ae-01b-covid).
 - In the Files pane (bottom right corner), spot the file called `covid.Rmd`.
 - Open it and click "Knit".
 - Then...
