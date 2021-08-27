@@ -2,7 +2,7 @@
 title: "Welcome to IDS!"
 subtitle: "<br><br> Introduction to Data Science"
 author: "[**idsed.digital**](https://idsed.digital/)"
-date: "<br> Dr. David Elliott"
+date: "<br> Dr. Alexander Homer"
 output:
   xaringan::moon_reader:
     css: ["./xaringan-themer.css", "./slides.css"]
