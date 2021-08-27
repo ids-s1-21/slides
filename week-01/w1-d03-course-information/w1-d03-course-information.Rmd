@@ -70,7 +70,7 @@ class: middle
 
 - On Thursdays 10:00am - 11:10am UK time
 
-- In person  - will be recorded and posted
+- On Zoom (will be recorded)
 
 - Live coding session
 
@@ -114,7 +114,7 @@ class: middle
 
 - Work on them individually
 
-- 10 multiple choice questions, some requiring a bit of coding some conceptual
+- 10 multiple choice questions, some requiring a bit of coding, some conceptual
 
 - **Tip:** Don't leave it till the last minute!
 
@@ -241,11 +241,13 @@ class: middle
 .pull-left-wide[
 - **Piazza** for course content, logistics, etc. discussion on the course discussion forum
 
-- **Teams** for real-time chat and brief questions
+- **Student hours** and **code along** sessions for real-time in person/video chat
 
-- **Student hours** and **code along** sessions for real-time video chat
+- **MathsBase** for drop-in support from a tutor
 
-- Most importantly, ask questions, don't worry about whether you're choosing the right medium / format.
+- **Email** for questions about personal matters (e.g. illness, concessions).
+
+- Most importantly, ask questions!
 ]
 
 ---
@@ -273,5 +275,5 @@ class: middle
 
 - You *never* owe me personal information about your health (mental or physical) but you're always welcome to talk to me. If I can’t help, I likely know someone who can.
 
-- I want you to learn lots of things from this class, but I primarily want you to stay healthy, balanced, and grounded during this crisis.
+- I want you to learn lots of things from this class, but I primarily want you to stay healthy, balanced, and grounded.
 ]
