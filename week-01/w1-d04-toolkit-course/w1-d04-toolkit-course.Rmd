@@ -124,6 +124,7 @@ knitr::include_graphics("img/zoom-signin-01.png")
 - Ask **and** answer
   - Piazza awards at the end of the semester!
 - Before posting, check questions that have already been asked
+- Can also be used for team based discussion
 
 ---
 
