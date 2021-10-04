@@ -142,7 +142,7 @@ dat %>% ggplot(aes(x = x, y = y)) +
 dat %>% ggplot(aes(x = x, y = y)) +
   geom_point() +
   geom_smooth(method = "lm", se = TRUE) +
-  coord_cartesian(ylim = c(0, 30)) +
+  coord_cartesian(ylim = c(0, 20)) +
   labs(caption = "Point at x = 4, y = 100 not shown.")
 ```
 
