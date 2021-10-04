@@ -20,6 +20,8 @@ output:
 ```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(emo)
+# knitr::opts_chunk$set(dev = "ragg_png")
+#Necessary when knitting on Windows, requires `ragg` package
 ```
 
 class: middle
