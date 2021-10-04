@@ -85,14 +85,13 @@ dat %>% ggplot(aes(x = x, y = y)) +
   geom_point() +
   geom_smooth(method = "lm")
 ```
-.hand[Hard to see what's going on with the low values!  We might]
-.hand[want to crop out the point at] $(4, 45)$.hand[.]
+.hand[Hard to see what's going on with the low values!  We might <br> want to crop out the point at] $(4, 45)$.hand[.]
 
 ---
 ## .hand[Scaling graphs:] `filter`
 
 ```{r ggplot-filter}
-dat %>% filter(y <= 50) %>%
+dat %>% filter(y <= 20) %>%
   ggplot(aes(x = x, y = y)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -108,8 +107,7 @@ dat %>% ggplot(aes(x = x, y = y)) +
   geom_point() +
   geom_smooth(method = "lm")
 ```
-.hand[All the values, including the regression line, are between]
-$0$ .hand[and] $15$.hand[.]
+.hand[All the other values, including the regression line, are <br> between] $0$ .hand[and] $20$.hand[.]
 
 
 ---
@@ -121,7 +119,7 @@ dat %>% ggplot(aes(x = x, y = y)) +
   geom_point() +
   geom_smooth(method = "lm") +
   scale_y_continuous(limits = c(0, 20)) +
-  labs(caption = "Point at x = 4, y = 40 not shown.")
+  labs(caption = "Point at x = 4, y = 45 not shown.")
 ```
 
 ---
@@ -133,7 +131,7 @@ dat %>% ggplot(aes(x = x, y = y)) +
   geom_point() +
   geom_smooth(method = "lm") +
   scale_y_continuous(limits = c(0, 20)) +
-  labs(caption = "Point at x = 4, y = 0 not shown.")
+  labs(caption = "Point at x = 4, y = 45 not shown.")
 ```
 
 ---
@@ -143,8 +141,8 @@ dat %>% ggplot(aes(x = x, y = y)) +
 ```{r ggplot-cartesian}
 dat %>% ggplot(aes(x = x, y = y)) +
   geom_point() +
-  geom_smooth(method = "lm", se = TRUE) +
+  geom_smooth(method = "lm") +
   coord_cartesian(ylim = c(0, 20)) +
-  labs(caption = "Point at x = 4, y = 100 not shown.")
+  labs(caption = "Point at x = 4, y = 45 not shown.")
 ```
 

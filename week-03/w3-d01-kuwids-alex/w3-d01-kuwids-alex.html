@@ -100,15 +100,14 @@ dat %&gt;% ggplot(aes(x = x, y = y)) +
 ## .hand[Scaling graphs]
 
 &lt;img src="w3-d01-kuwids-alex_files/figure-html/first-ggplot-rep-1.png" width="60%" style="display: block; margin: auto;" /&gt;
-.hand[Hard to see what's going on with the low values!  We might]
-.hand[want to crop out the point at] `\((4, 45)\)`.hand[.]
+.hand[Hard to see what's going on with the low values!  We might &lt;br&gt; want to crop out the point at] `\((4, 45)\)`.hand[.]
 
 ---
 ## .hand[Scaling graphs:] `filter`
 
 
 ```r
-dat %&gt;% filter(y &lt;= 50) %&gt;%
+dat %&gt;% filter(y &lt;= 20) %&gt;%
   ggplot(aes(x = x, y = y)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -122,8 +121,7 @@ dat %&gt;% filter(y &lt;= 50) %&gt;%
 ## .hand[Scaling graphs]
 
 &lt;img src="w3-d01-kuwids-alex_files/figure-html/first-ggplot-rep-2-1.png" width="60%" style="display: block; margin: auto;" /&gt;
-.hand[All the values, including the regression line, are between]
-`\(0\)` .hand[and] `\(15\)`.hand[.]
+.hand[All the other values, including the regression line, are &lt;br&gt; between] `\(0\)` .hand[and] `\(20\)`.hand[.]
 
 
 ---
@@ -136,7 +134,7 @@ dat %&gt;% ggplot(aes(x = x, y = y)) +
   geom_point() +
   geom_smooth(method = "lm") +
   scale_y_continuous(limits = c(0, 20)) +
-  labs(caption = "Point at x = 4, y = 40 not shown.")
+  labs(caption = "Point at x = 4, y = 45 not shown.")
 ```
 
 ```
@@ -158,7 +156,7 @@ dat %&gt;% ggplot(aes(x = x, y = y)) +
   geom_point() +
   geom_smooth(method = "lm") +
   scale_y_continuous(limits = c(0, 20)) +
-  labs(caption = "Point at x = 4, y = 0 not shown.")
+  labs(caption = "Point at x = 4, y = 45 not shown.")
 ```
 
 &lt;img src="w3-d01-kuwids-alex_files/figure-html/ggplot-scale-plot-1.png" width="60%" style="display: block; margin: auto;" /&gt;
@@ -171,9 +169,9 @@ dat %&gt;% ggplot(aes(x = x, y = y)) +
 ```r
 dat %&gt;% ggplot(aes(x = x, y = y)) +
   geom_point() +
-  geom_smooth(method = "lm", se = TRUE) +
+  geom_smooth(method = "lm") +
   coord_cartesian(ylim = c(0, 20)) +
-  labs(caption = "Point at x = 4, y = 100 not shown.")
+  labs(caption = "Point at x = 4, y = 45 not shown.")
 ```
 
 &lt;img src="w3-d01-kuwids-alex_files/figure-html/ggplot-cartesian-1.png" width="60%" style="display: block; margin: auto;" /&gt;
