@@ -1,0 +1,148 @@
+---
+title: "Keeping up with IDS: Week 03 (Alex's slides)"
+subtitle: "<br><br> Introduction to Data Science"
+author: "[idsed.digital](https://idsed.digital/)"
+date: "<br> Alex Homer"
+output:
+  xaringan::moon_reader:
+    css: ["./xaringan-themer.css", "./slides.css"]
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+      highlightStyle: solarized-light
+      countIncrementalSlides: false
+---
+
+```{r child = "../../setup.Rmd"}
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(emo)
+```
+
+class: middle
+
+# .hand[Personal access tokens]
+
+
+---
+
+## .hand[Personal access tokens]
+
+.hand[
+- It seems like RStudio is having some trouble with remembering PATs between sessions
+- Two solutions:
+  - Create a new one each time
+  - Store it in a password manager
+- .pink[*Do not* store it in plaintext!]
+]
+---
+class: middle
+
+# .hand[Scaling graphs]
+
+
+---
+
+## .hand[Scaling graphs]
+
+```{r tribble}
+dat <- tribble(
+   ~x,   ~y,
+   1,    0.5,
+   1.5,  1,
+   2,    2,
+   2.5,  2.5,
+   3,    3,
+   3.5,  3,
+   4,    45,
+   4.5,  4.5,
+   5,    4,
+   5.5,  5,
+   6,    5.5
+)
+```
+---
+
+## .hand[Scaling graphs]
+
+```{r first-ggplot}
+dat %>% ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+---
+
+## .hand[Scaling graphs]
+
+```{r first-ggplot-rep, echo = FALSE}
+dat %>% ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+.hand[Hard to see what's going on with the low values!  We might]
+.hand[want to crop out the point at] $(4, 45)$.hand[.]
+
+---
+## .hand[Scaling graphs:] `filter`
+
+```{r ggplot-filter}
+dat %>% filter(y <= 50) %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(caption = "Point at x = 4, y = 45 not shown.")
+```
+
+---
+
+## .hand[Scaling graphs]
+
+```{r first-ggplot-rep-2, echo = FALSE}
+dat %>% ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+.hand[All the values, including the regression line, are between]
+$0$ .hand[and] $15$.hand[.]
+
+
+---
+
+## .hand[Scaling graphs:] `scale_y_continuous`
+
+```{r ggplot-scale, fig.show = "hide"}
+dat %>% ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_y_continuous(limits = c(0, 20)) +
+  labs(caption = "Point at x = 4, y = 40 not shown.")
+```
+
+---
+
+## .hand[Scaling graphs:] `scale_y_continuous`
+
+```{r ggplot-scale-plot, warning = FALSE}
+dat %>% ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_y_continuous(limits = c(0, 20)) +
+  labs(caption = "Point at x = 4, y = 0 not shown.")
+```
+
+---
+
+## .hand[Scaling graphs:] `coord_cartesian`
+
+```{r ggplot-cartesian}
+dat %>% ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = TRUE) +
+  coord_cartesian(ylim = c(0, 30)) +
+  labs(caption = "Point at x = 4, y = 100 not shown.")
+```
+
