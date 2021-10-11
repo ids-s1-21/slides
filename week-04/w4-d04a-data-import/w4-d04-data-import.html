@@ -3,14 +3,16 @@
   <head>
     <title>Importing data</title>
     <meta charset="utf-8" />
-    <meta name="author" content="idsed.digital" />
+    <meta name="author" content="introds.org" />
     <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+    <script src="libs/anchor-sections/anchor-sections.js"></script>
     <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
     <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
     <link href="libs/panelset/panelset.css" rel="stylesheet" />
     <script src="libs/panelset/panelset.js"></script>
-    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
-    <link rel="stylesheet" href="slides.css" type="text/css" />
+    <link rel="stylesheet" href="../../xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="../../slides.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -18,7 +20,7 @@ class: center, middle, inverse, title-slide
 
 # Importing data
 ## <br><br> Introduction to Data Science
-### <a href="https://idsed.digital/">idsed.digital</a>
+### <a href="https://introds.org/">introds.org</a>
 ### <br> Dr. Mine Çetinkaya-Rundel
 
 ---
@@ -31,7 +33,7 @@ layout: true
   
 &lt;div class="my-footer"&gt;
 &lt;span&gt;
-&lt;a href="https://idsed.digital" target="_blank"&gt;idsed.digital&lt;/a&gt;
+&lt;a href="https://introds.org" target="_blank"&gt;introds.org&lt;/a&gt;
 &lt;/span&gt;
 &lt;/div&gt; 
 
@@ -86,21 +88,23 @@ nobel
 
 ```
 ## # A tibble: 935 x 26
-##      id firstname      surname    year category affiliation city 
-##   &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;
-## 1     1 Wilhelm Conrad Röntgen    1901 Physics  Munich Uni~ Muni~
-## 2     2 Hendrik A.     Lorentz    1902 Physics  Leiden Uni~ Leid~
-## 3     3 Pieter         Zeeman     1902 Physics  Amsterdam ~ Amst~
-## 4     4 Henri          Becquerel  1903 Physics  École Poly~ Paris
-## 5     5 Pierre         Curie      1903 Physics  École muni~ Paris
-## 6     6 Marie          Curie      1903 Physics  &lt;NA&gt;        &lt;NA&gt; 
-## # ... with 929 more rows, and 19 more variables: country &lt;chr&gt;,
+##      id firstname surname  year category affiliation city 
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;
+## 1     1 Wilhelm … Röntgen  1901 Physics  Munich Uni… Muni…
+## 2     2 Hendrik … Lorentz  1902 Physics  Leiden Uni… Leid…
+## 3     3 Pieter    Zeeman   1902 Physics  Amsterdam … Amst…
+## 4     4 Henri     Becque…  1903 Physics  École Poly… Paris
+## 5     5 Pierre    Curie    1903 Physics  École muni… Paris
+## 6     6 Marie     Curie    1903 Physics  &lt;NA&gt;        &lt;NA&gt; 
+## # … with 929 more rows, and 19 more variables: country &lt;chr&gt;,
 ## #   born_date &lt;date&gt;, died_date &lt;date&gt;, gender &lt;chr&gt;,
 ## #   born_city &lt;chr&gt;, born_country &lt;chr&gt;,
 ## #   born_country_code &lt;chr&gt;, died_city &lt;chr&gt;,
 ## #   died_country &lt;chr&gt;, died_country_code &lt;chr&gt;,
 ## #   overall_motivation &lt;chr&gt;, share &lt;dbl&gt;, motivation &lt;chr&gt;,
-## #   born_country_original &lt;chr&gt;, born_city_original &lt;chr&gt;, ...
+## #   born_country_original &lt;chr&gt;, born_city_original &lt;chr&gt;,
+## #   died_country_original &lt;chr&gt;, died_city_original &lt;chr&gt;,
+## #   city_original &lt;chr&gt;, country_original &lt;chr&gt;
 ```
 
 ---
@@ -382,7 +386,7 @@ read_csv("data/df-na.csv")
 
 ```
 ## 
-## -- Column specification -----------------------------------------
+## ── Column specification ─────────────────────────────────────────
 ## cols(
 ##   x = col_character(),
 ##   y = col_character(),
@@ -426,11 +430,11 @@ fav_food
 ## # A tibble: 5 x 6
 ##   `Student ID` `Full Name`  favourite.food  mealPlan  AGE   SES  
 ##          &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;
-## 1            1 Sunil Huffm~ Strawberry yog~ Lunch on~ 4     High 
-## 2            2 Barclay Lynn French fries    Lunch on~ 5     Midd~
-## 3            3 Jayendra Ly~ N/A             Breakfas~ 7     Low  
-## 4            4 Leon Rossini Anchovies       Lunch on~ 99999 Midd~
-## 5            5 Chidiegwu D~ Pizza           Breakfas~ five  High
+## 1            1 Sunil Huffm… Strawberry yog… Lunch on… 4     High 
+## 2            2 Barclay Lynn French fries    Lunch on… 5     Midd…
+## 3            3 Jayendra Ly… N/A             Breakfas… 7     Low  
+## 4            4 Leon Rossini Anchovies       Lunch on… 99999 Midd…
+## 5            5 Chidiegwu D… Pizza           Breakfas… five  High
 ```
 
 ---
@@ -453,11 +457,11 @@ fav_food
 ## # A tibble: 5 x 6
 ##   student_id full_name   favourite_food   meal_plan   age   ses  
 ##        &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;            &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;
-## 1          1 Sunil Huff~ Strawberry yogh~ Lunch only  4     High 
-## 2          2 Barclay Ly~ French fries     Lunch only  5     Midd~
-## 3          3 Jayendra L~ N/A              Breakfast ~ 7     Low  
-## 4          4 Leon Rossi~ Anchovies        Lunch only  99999 Midd~
-## 5          5 Chidiegwu ~ Pizza            Breakfast ~ five  High
+## 1          1 Sunil Huff… Strawberry yogh… Lunch only  4     High 
+## 2          2 Barclay Ly… French fries     Lunch only  5     Midd…
+## 3          3 Jayendra L… N/A              Breakfast … 7     Low  
+## 4          4 Leon Rossi… Anchovies        Lunch only  99999 Midd…
+## 5          5 Chidiegwu … Pizza            Breakfast … five  High
 ```
 
 ---
@@ -481,11 +485,11 @@ fav_food
 ## # A tibble: 5 x 6
 ##   student_id full_name   favourite_food   meal_plan   age   ses  
 ##        &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;            &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;
-## 1          1 Sunil Huff~ Strawberry yogh~ Lunch only  4     High 
-## 2          2 Barclay Ly~ French fries     Lunch only  5     Midd~
-## 3          3 Jayendra L~ &lt;NA&gt;             Breakfast ~ 7     Low  
-## 4          4 Leon Rossi~ Anchovies        Lunch only  &lt;NA&gt;  Midd~
-## 5          5 Chidiegwu ~ Pizza            Breakfast ~ five  High
+## 1          1 Sunil Huff… Strawberry yogh… Lunch only  4     High 
+## 2          2 Barclay Ly… French fries     Lunch only  5     Midd…
+## 3          3 Jayendra L… &lt;NA&gt;             Breakfast … 7     Low  
+## 4          4 Leon Rossi… Anchovies        Lunch only  &lt;NA&gt;  Midd…
+## 5          5 Chidiegwu … Pizza            Breakfast … five  High
 ```
 
 ---
@@ -508,11 +512,11 @@ glimpse(fav_food)
 ## Rows: 5
 ## Columns: 6
 ## $ student_id     &lt;dbl&gt; 1, 2, 3, 4, 5
-## $ full_name      &lt;chr&gt; "Sunil Huffmann", "Barclay Lynn", "Jayen~
-## $ favourite_food &lt;chr&gt; "Strawberry yoghurt", "French fries", NA~
-## $ meal_plan      &lt;chr&gt; "Lunch only", "Lunch only", "Breakfast a~
+## $ full_name      &lt;chr&gt; "Sunil Huffmann", "Barclay Lynn", "Jaye…
+## $ favourite_food &lt;chr&gt; "Strawberry yoghurt", "French fries", N…
+## $ meal_plan      &lt;chr&gt; "Lunch only", "Lunch only", "Breakfast …
 ## $ age            &lt;dbl&gt; 4, 5, 7, NA, 5
-## $ ses            &lt;chr&gt; "High", "Middle", "Low", "Middle", "High"
+## $ ses            &lt;chr&gt; "High", "Middle", "Low", "Middle", "Hig…
 ```
 ]
 .pull-right-narrow[
@@ -592,11 +596,11 @@ fav_food
 ## # A tibble: 5 x 6
 ##   student_id full_name   favourite_food   meal_plan     age ses  
 ##        &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;            &lt;chr&gt;       &lt;dbl&gt; &lt;fct&gt;
-## 1          1 Sunil Huff~ Strawberry yogh~ Lunch only      4 High 
-## 2          2 Barclay Ly~ French fries     Lunch only      5 Midd~
-## 3          3 Jayendra L~ &lt;NA&gt;             Breakfast ~     7 Low  
-## 4          4 Leon Rossi~ Anchovies        Lunch only     NA Midd~
-## 5          5 Chidiegwu ~ Pizza            Breakfast ~     5 High
+## 1          1 Sunil Huff… Strawberry yogh… Lunch only      4 High 
+## 2          2 Barclay Ly… French fries     Lunch only      5 Midd…
+## 3          3 Jayendra L… &lt;NA&gt;             Breakfast …     7 Low  
+## 4          4 Leon Rossi… Anchovies        Lunch only     NA Midd…
+## 5          5 Chidiegwu … Pizza            Breakfast …     5 High
 ```
 
 ---
@@ -709,7 +713,7 @@ class: middle
 ## 4 1822    3    
 ## 5 Brand 2 n    
 ## 6 3333    1    
-## # ... with 3 more rows
+## # … with 3 more rows
 ```
 ]
 .pull-right[
@@ -724,7 +728,7 @@ class: middle
 ## 4 Brand 2  3333     1
 ## 5 Brand 2  2156     3
 ## 6 Brand 2  3987     6
-## # ... with 1 more row
+## # … with 1 more row
 ```
 ]
     </textarea>

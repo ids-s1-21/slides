@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Importing data through RStudio’s GUI</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="idsed.digital" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Importing data through RStudio’s GUI
+## <br><br> Introduction to Data Science
+### <a href="https://idsed.digital/">idsed.digital</a>
+### <br> Alex Homer
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+&lt;a href="https://introds.org" target="_blank"&gt;introds.org&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+---
+
+## What's a GUI?
+
+- "Graphical User Interface"
+
+- We've been using one already!
+
+---
+
+class: middle
+
+# CSV files
+
+---
+
+## Importing data
+
+- We've talked about the `read_csv` function
+
+- The options are a little bit fiddly
+
+  - Especially for wide datasets
+  
+- You have to inspect the dataset manually to get it right
+
+---
+## Tube stations data
+
+
+```r
+tube &lt;- read_csv("data/tube-stations.csv")
+```
+
+```
+## Warning: 8 parsing failures.
+## row col  expected    actual                     file
+##   1  -- 2 columns 1 columns 'data/tube-stations.csv'
+##   2  -- 2 columns 3 columns 'data/tube-stations.csv'
+##   3  -- 2 columns 1 columns 'data/tube-stations.csv'
+##   4  -- 2 columns 1 columns 'data/tube-stations.csv'
+##   5  -- 2 columns 1 columns 'data/tube-stations.csv'
+## ... ... ......... ......... ........................
+## See problems(...) for more details.
+```
+
+--
+
+Well, this doesn't seem to have worked!  Let's look at the dataset…
+
+---
+## Tube stations data
+
+
+```r
+tube
+```
+
+```
+## # A tibble: 8 x 2
+##   `Station; Line; Zone; Opened; Number of passengers (mi~ `2019)`
+##   &lt;chr&gt;                                                     &lt;dbl&gt;
+## 1 Russell Square; Piccadilly; 1; 15-DEC-1906; 12.27            NA
+## 2 Heathrow Terminals 1                                          2
+## 3 Kingsbury; Jubilee; 4; 10-DEC-1932; 4.55                     NA
+## 4 Tooting Bec; Northern; 3; 13-SEP-1926; 7.67                  NA
+## 5 Warwick Avenue; Bakerloo; 2; 31-JAN-1915; 4.00               NA
+## 6 Upminster Bridge; District; 6; 17-DEC-1932; 1.11             NA
+## # ... with 2 more rows
+```
+- The separators are semicolons, not commas!
+- So we could use `read_csv2` - but we have to remember that!
+- Is there an easier way?
+---
+class: inverse
+background-image: url("img/From-text-readr.png")
+
+## The "Import Dataset" menu
+
+Several options!  Choose **From Text (readr)...**.
+
+---
+class: inverse
+background-image: url("img/Import-box.png")
+background-size: contain
+
+---
+class: inverse
+background-image: url("img/Preview-1.png")
+background-size: contain
+---
+class: inverse
+background-image: url("img/Preview-2.png")
+background-size: contain
+---
+
+## Choosing a data type
+
+.pull-left[
+.center[![The drop-down menu for the "Zone" column](img/Zone-type.png)]
+]
+
+--
+
+.pull-right[
+.center[![The drop-down menu for the "Opened" column](img/Date-type.png)]
+]
+
+---
+class: inverse
+background-image: url("img/date-1.png")
+
+## Date formats
+The default isn't right!
+
+---
+class: inverse
+background-image: url("img/date-2.png")
+
+## Date formats
+Our dates are of the form `01-JAN-1900`, so we need to type `%d-%b-%Y` into the box. 
+
+Type `?col_date` into the console for more info on the syntax.
+
+---
+class: inverse
+background-image: url("img/Preview-3.png")
+background-size: contain
+---
+## Importing from a CSV using the GUI
+
+.center[![The final appearance of the data table in the import dialog box](img/finished-data.png)]
+
+- All the data types are correct
+- Note the non-integer Zone has become an `NA` …
+- … but not all NAs have been removed!
+---
+## Importing from a CSV using the GUI
+
+.center[![The final appearance of the code in the import dialog box](img/final-code-preview.png)]
+
+- We can run the code directly from the dialog box, but that won't help with reproducibility/portability of the code
+- Instead, click the clipboard button
+
+---
+## Importing from a CSV using the GUI
+
+
+```r
+#library(readr)
+tube_stations &lt;- read_delim("data/tube-stations.csv", 
+    delim = ";", escape_double = FALSE, col_types = cols(Zone = col_integer(), 
+        Opened = col_date(format = "%d-%b-%Y")), 
+    trim_ws = TRUE)
+```
+
+```
+## Warning: 1 parsing failure.
+## row  col   expected        actual                     file
+##   8 Zone an integer not in a zone 'data/tube-stations.csv'
+```
+It gives us the `readr` library, but if we've already imported the tidyverse we don't need to include that line, and can delete it.
+
+The warning message here is fine---it's telling us that "`not in a zone`" is not an integer, which we already know!
+---
+
+## Importing from a CSV using the GUI
+
+Let's prove it worked!
+
+
+
+```r
+tube_stations %&gt;%
+  summarise(mean_date = mean(Opened), med_zone = median(Zone, na.rm = T))
+```
+
+```
+## # A tibble: 1 x 2
+##   mean_date  med_zone
+##   &lt;date&gt;        &lt;int&gt;
+## 1 2056-05-13        3
+```
+
+- The mean date is in the future because we haven't removed that Year 3000 date yet…
+---
+
+class: middle
+
+# Excel files
+---
+## Our data in an Excel file
+
+
+.center[![Nearly same data we've been working with, but in an Excel file](img/excel-sheet.png)]
+
+The same data (except for Watford Junction)
+---
+class: inverse
+background-image: url("img/From-text-readr.png")
+
+## The "Import Dataset" menu
+
+Now we want **From Excel...**.
+
+---
+class: inverse
+background-image: url("img/Import-box-xl.png")
+background-size: contain
+
+---
+class: inverse
+background-image: url("img/Preview-xl.png")
+background-size: contain
+---
+
+## Importing from Excel using the GUI
+
+.center[![The final appearance of the Import Options in the dialog box, from Excel](img/Import-options-xl.png)]
+
+- We need to specify the range of cells in which the data are stored (or use the **Skip:** field)
+- The **Name:** field is the name under which we'll store the data once imported
+  - Choose something different to avoid overwriting!
+
+---
+
+## Importing from Excel using the GUI
+
+.center[![The final appearance of the data in the dialog box, from Excel](img/finished-data-xl.png)]
+
+- We don't get separate **double** and **integer** options here: all we can choose is **numeric** (we can fix that later)
+- Dates are handled easily, because of the way they're stored in Excel
+
+---
+
+## Importing from Excel using the GUI
+
+.center[![The final appearance of the code from the dialog box, from Excel](img/final-code-preview-xl.png)]
+
+- Again, let's copy this out using the clipboard icon…
+
+
+```r
+library(readxl)
+tube_stations_excel &lt;- read_excel("data/tube-stations.xlsx", 
+    range = "A3:E10", col_types = c("text", 
+        "text", "numeric", "date", "numeric"))
+```
+- I've suppressed the warnings (`warning = F` in the code chunk label) because it gives lots, for every time it changes the data type in a cell
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true,
+"highlightStyle": "solarized-light",
+"countIncrementalSlides": false,
+"self_contained": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
