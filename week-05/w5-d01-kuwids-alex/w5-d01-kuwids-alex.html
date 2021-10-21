@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Keeping up with IDS: Week 5 (Alex’s slides)</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="idsed.digital" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Keeping up with IDS: Week 5<br>(Alex’s slides)
+## <br> Introduction to Data Science
+### <a href="https://idsed.digital/">idsed.digital</a>
+### <br> Alex Homer
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+&lt;a href="https://idsed.digital" target="_blank"&gt;idsed.digital&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+---
+## Some data
+
+```r
+library(palmerpenguins)
+View(penguins)
+```
+
+|species |island    | bill_length_mm| bill_depth_mm| flipper_length_mm|
+|:-------|:---------|--------------:|-------------:|-----------------:|
+|Adelie  |Torgersen |           39.1|          18.7|               181|
+|Adelie  |Torgersen |           39.5|          17.4|               186|
+|Adelie  |Torgersen |           40.3|          18.0|               195|
+|Adelie  |Torgersen |             NA|            NA|                NA|
+|Adelie  |Torgersen |           36.7|          19.3|               193|
+|Adelie  |Torgersen |           39.3|          20.6|               190|
+Columns 1–5
+
+---
+
+## Some data
+
+
+```r
+library(palmerpenguins)
+View(penguins)
+```
+
+.pull-left[
+
+| body_mass_g|sex    | year|
+|-----------:|:------|----:|
+|        3750|male   | 2007|
+|        3800|female | 2007|
+|        3250|female | 2007|
+|          NA|NA     | 2007|
+|        3450|female | 2007|
+|        3650|male   | 2007|
+Columns 6–8
+]
+
+.pull-right[
+![Images of the three types of penguin](img/penguins.png)
+Penguin artwork by&lt;br /&gt;@allison_horst.
+]
+
+---
+
+
+## Types of penguin
+
+```r
+penguins %&gt;% count(species, island)
+```
+
+|species   |island    |   n|
+|:---------|:---------|---:|
+|Adelie    |Biscoe    |  44|
+|Adelie    |Dream     |  56|
+|Adelie    |Torgersen |  52|
+|Chinstrap |Dream     |  68|
+|Gentoo    |Biscoe    | 124|
+
+Suppose we want to create a new variable for each species–island&lt;br /&gt;combination, and do a `facet_wrap` by that.  (This might sound strange...)
+
+---
+## Why we're doing this...
+
+```r
+penguins %&gt;%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  facet_grid(species~island)
+```
+
+&lt;img src="w5-d01-kuwids-alex_files/figure-html/grid-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Mutating
+
+```r
+penguins %&gt;%
+  mutate(species_island = paste(species, island))
+```
+
+|species_island   | bill_length_mm| bill_depth_mm|
+|:----------------|--------------:|-------------:|
+|Adelie Torgersen |           39.1|          18.7|
+|Adelie Torgersen |           39.5|          17.4|
+|Adelie Torgersen |           40.3|          18.0|
+|Adelie Torgersen |             NA|            NA|
+|Adelie Torgersen |           36.7|          19.3|
+|Adelie Torgersen |           39.3|          20.6|
+
+---
+
+## Now a plot
+
+```r
+penguins %&gt;%
+  mutate(species_island = paste(species, island)) %&gt;%
+  ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point()
+```
+
+&lt;img src="w5-d01-kuwids-alex_files/figure-html/big-plot-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Now faceting... uh-oh
+
+```r
+penguins %&gt;%
+  mutate(species_island = paste(species, island)) %&gt;%
+  ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  facet_wrap(~species_island)
+```
+
+```
+## Error: At least one layer must contain all faceting variables: `species_island`.
+## * Plot is missing `species_island`
+## * Layer 1 is missing `species_island`
+```
+
+&lt;img src="w5-d01-kuwids-alex_files/figure-html/facet-oops-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Now faceting... uh-oh
+
+```r
+penguins %&gt;%
+  mutate(species_island = paste(species, island)) %&gt;%
+  ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  facet_wrap(~species_island)
+```
+
+Looks like the error is with the `facet_wrap` statement... but no!
+
+The problem is the `data = penguins`: it means `ggplot` is just going back to the original dataset, and ignoring the variable we created with `mutate` that's in the piped-in dataset.  This isn't a problem until we try to use it!
+
+---
+
+## Fixed code
+
+```r
+penguins %&gt;%
+  mutate(species_island = paste(species, island)) %&gt;%
+  ggplot(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  facet_wrap(~species_island)
+```
+
+&lt;img src="w5-d01-kuwids-alex_files/figure-html/facet-better-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Starting again...
+... but without argument names inside `ggplot`!
+
+```r
+penguins %&gt;%
+  mutate(species_island = paste(species, island))
+```
+
+|species_island   | bill_length_mm| bill_depth_mm|
+|:----------------|--------------:|-------------:|
+|Adelie Torgersen |           39.1|          18.7|
+|Adelie Torgersen |           39.5|          17.4|
+|Adelie Torgersen |           40.3|          18.0|
+|Adelie Torgersen |             NA|            NA|
+|Adelie Torgersen |           36.7|          19.3|
+|Adelie Torgersen |           39.3|          20.6|
+---
+## Starting again...
+... and now `ggplot` doesn't work.
+
+
+```r
+penguins %&gt;%
+  mutate(species_island = paste(species, island)) %&gt;%
+  ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point()
+```
+
+```
+## Error: Mapping should be created with `aes()` or `aes_()`.
+```
+
+This error is because, without argument names, it now is (correctly) interpreting the piped-in data as the first (`data = `) argument, and trying to interpret `penguins` as the second (`mapping = `) argument, which is wrong.
+
+---
+## Fixing the problem earlier
+
+
+```r
+penguins %&gt;%
+  mutate(species_island = paste(species, island)) %&gt;%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point()
+```
+
+&lt;img src="w5-d01-kuwids-alex_files/figure-html/big-plot-right-2-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+---
+## Fixing the problem earlier
+
+
+```r
+penguins %&gt;%
+  mutate(species_island = paste(species, island)) %&gt;%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  facet_wrap(~species_island)
+```
+
+&lt;img src="w5-d01-kuwids-alex_files/figure-html/facet-abs-final-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true,
+"highlightStyle": "solarized-light",
+"countIncrementalSlides": false,
+"self_contained": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,199 @@
+---
+title: "Keeping up with IDS: Week 5<br>(Alex's slides)"
+subtitle: "<br> Introduction to Data Science"
+author: "[idsed.digital](https://idsed.digital/)"
+date: "<br> Alex Homer"
+output:
+  xaringan::moon_reader:
+    css: ["./xaringan-themer.css", "./slides.css"]
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+      highlightStyle: solarized-light
+      countIncrementalSlides: false
+      self_contained: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r child = "../../setup.Rmd"}
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(emo)
+```
+---
+## Some data
+```{r data-show, eval = FALSE}
+library(palmerpenguins)
+View(penguins)
+```
+```{r data, echo = FALSE, results = "asis"}
+library(palmerpenguins)
+penguins %>%
+  head() %>%
+  select(species, island, bill_length_mm, bill_depth_mm, flipper_length_mm) %>%
+  knitr::kable()
+```
+Columns 1–5
+
+---
+
+## Some data
+
+```{r data-show-2, eval = FALSE}
+library(palmerpenguins)
+View(penguins)
+```
+
+.pull-left[
+```{r data-2, echo = FALSE, results = "asis"}
+penguins %>%
+  head() %>%
+  select(-c(species, island, bill_length_mm, bill_depth_mm, flipper_length_mm)) %>%
+  knitr::kable()
+```
+Columns 6–8
+]
+
+.pull-right[
+![Images of the three types of penguin](img/penguins.png)
+Penguin artwork by<br />@allison_horst.
+]
+
+---
+
+
+## Types of penguin
+```{r count-species-show, eval = FALSE}
+penguins %>% count(species, island)
+```
+```{r count-species-display, echo = FALSE, results = "asis"}
+penguins %>%
+  count(species, island) %>%
+  knitr::kable()
+```
+
+Suppose we want to create a new variable for each species–island<br />combination, and do a `facet_wrap` by that.  (This might sound strange...)
+
+---
+## Why we're doing this...
+```{r grid, warning = FALSE}
+penguins %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  facet_grid(species~island)
+```
+
+
+---
+
+## Mutating
+```{r mutate, eval = FALSE}
+penguins %>%
+  mutate(species_island = paste(species, island))
+```
+```{r mutate-kable, echo = FALSE, results = "asis"}
+penguins %>%
+  mutate(species_island = paste(species, island)) %>%
+  head() %>%
+  select(species_island, bill_length_mm, bill_depth_mm) %>%
+  knitr::kable()
+```
+
+---
+
+## Now a plot
+```{r big-plot, warning = FALSE}
+penguins %>%
+  mutate(species_island = paste(species, island)) %>%
+  ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point()
+```
+
+---
+
+## Now faceting... uh-oh
+```{r facet-oops, error = TRUE}
+penguins %>%
+  mutate(species_island = paste(species, island)) %>%
+  ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  facet_wrap(~species_island)
+```
+
+---
+
+## Now faceting... uh-oh
+```{r facet-oops-2, eval = FALSE}
+penguins %>%
+  mutate(species_island = paste(species, island)) %>%
+  ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  facet_wrap(~species_island)
+```
+
+Looks like the error is with the `facet_wrap` statement... but no!
+
+The problem is the `data = penguins`: it means `ggplot` is just going back to the original dataset, and ignoring the variable we created with `mutate` that's in the piped-in dataset.  This isn't a problem until we try to use it!
+
+---
+
+## Fixed code
+```{r facet-better, warning = FALSE}
+penguins %>%
+  mutate(species_island = paste(species, island)) %>%
+  ggplot(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  facet_wrap(~species_island)
+```
+
+---
+
+## Starting again...
+... but without argument names inside `ggplot`!
+```{r mutate-again, eval = FALSE}
+penguins %>%
+  mutate(species_island = paste(species, island))
+```
+```{r mutate-kable-again, echo = FALSE, results = "asis"}
+penguins %>%
+  mutate(species_island = paste(species, island)) %>%
+  head() %>%
+  select(species_island, bill_length_mm, bill_depth_mm) %>%
+  knitr::kable()
+```
+---
+## Starting again...
+... and now `ggplot` doesn't work.
+
+```{r big-plot-oops, error = TRUE}
+penguins %>%
+  mutate(species_island = paste(species, island)) %>%
+  ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point()
+```
+
+This error is because, without argument names, it now is (correctly) interpreting the piped-in data as the first (`data = `) argument, and trying to interpret `penguins` as the second (`mapping = `) argument, which is wrong.
+
+---
+## Fixing the problem earlier
+
+```{r big-plot-right-2, warning = FALSE}
+penguins %>%
+  mutate(species_island = paste(species, island)) %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point()
+```
+---
+## Fixing the problem earlier
+
+```{r facet-abs-final, warning = FALSE}
+penguins %>%
+  mutate(species_island = paste(species, island)) %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  facet_wrap(~species_island)
+```
