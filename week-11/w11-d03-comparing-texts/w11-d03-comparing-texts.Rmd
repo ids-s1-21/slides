@@ -1,0 +1,28 @@
+---
+title: "Comparing texts"
+subtitle: "<br><br> Introduction to Data Science"
+author: "[idsed.digital](https://idsed.digital/)"
+date: "<br> Dr. Mine Çetinkaya-Rundel"
+output:
+  xaringan::moon_reader:
+    css: ["./xaringan-themer.css", "./slides.css"]
+    lib_dir: libs
+    anchor_sections: FALSE
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+      highlightStyle: solarized-light
+      countIncrementalSlides: false
+---
+
+```{r child = "../../setup.Rmd"}
+```
+
+## What is a document about?
+
+- Term frequency
+- Inverse document frequency
+
+$$idf(\text{term}) = \ln{\left(\frac{n_{\text{documents}}}{n_{\text{documents containing term}}}\right)}$$
+
+tf-idf is about comparing **documents** within a **collection**
